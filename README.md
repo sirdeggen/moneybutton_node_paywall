@@ -9,7 +9,7 @@ To use any of this you need to be running node.js and instlal a bunch of stuff.
 
 - npm i express
 - npm i body-parser
-- npm fs
-- npm https
+- npm i fs
+- npm i https
 
 I think that's it.
