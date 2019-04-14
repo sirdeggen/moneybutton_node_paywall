@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Paid content
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      html{
+        margin: 0;
+      }
+
+      body {
+        font-family: helvetica, sans-serif;
+        text-align: center;
+        color: #444;
+      }
+
+      h1 {
+        padding: 12px;
+        margin: 30px 10px 0px 10px;
+        font-size: 26px;
+      }
+
+      #my-money-button{
+        margin-bottom: 20px;
+      }
+
+      p{
+        max-width: 400px;
+        margin: 20px auto;
+        text-align: left;
+        padding: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Node.js Paywall</h1>
+    <p>This content is all free and worthless.<br><br>
+
+      However, if you're interested in information worth 10 pence then please feel free to swipe the button below.<br><br>
+
+      This paywall does not work like the NYTimes, or other javascript "paywalls" which only hide the elements with css classes, but instead it works by calling up data from a node server in the back-end.<br><br>
+      <b>WHY CARE?</b><br>
+      Well, this way techies can't take a look at the developer view of this page and simply turn on the divs. You have to send a payment object to get the data, or otherwise hack into my server. Please don't do that.</p>
+    <script src="https://www.moneybutton.com/moneybutton.js"></script>
+    <div id="my-money-button"></div>
+    <div id="paid-content"></div>
+    <script>
+      function displayInfo (payment) {
+        console.log('A payment has occurred!', payment);
+        const Url = "https://YOURWEBSITEHERE.com:8443/paid";
+        const otherParams = {
+          headers:{
+            "Content-Type":"application/json",
+            "Accept":"application/json"
+          },
+          body: JSON.stringify(payment),
+          mode: "cors",
+          method:"POST"
+         };
+        const datares = fetch(Url,otherParams)
+        .then(data=>{
+          return data.json()
+        })
+        .then(res=>{
+          var jsonres = res;
+          console.log(jsonres);
+          document.querySelector("#paid-content").innerHTML = `<img src="${jsonres.imgurl}" alt="secret" />`;
+          document.querySelector("#my-money-button").style.display = "none";
+          console.log(jsonres);
+        })
+        .then(error=>{console.log(error)});
+      };
+
+      function revealStuff(data){
+        var jsondata = data.json();
+
+      };
+
+      const div = document.querySelector('#my-money-button');
+      moneyButton.render(div, {
+        to: "<<<<<PUT YOUR MONEYBUTTON USER ID IN HERE>>>>>>",
+        amount: "0.10",
+        currency: "GBP",
+        onPayment: displayInfo,
+        label: "Pay for content"
+      })
+
+    </script>
+  </body>
+</html>
