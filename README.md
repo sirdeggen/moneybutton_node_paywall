@@ -13,3 +13,6 @@ To use any of this you need to be running node.js and instlal a bunch of stuff.
 - npm i https
 
 I think that's it.
+
+##DEMO SITE
+[londonbitcoinmeetup.com](https://londonbitcoinmeetup.com/byali/)
