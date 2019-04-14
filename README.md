@@ -7,9 +7,9 @@ There are a few <<<<<<<<< "THINGS TO ENTER YOURSELF" >>>>>>>>>>>>
 
 To use any of this you need to be running node.js and instlal a bunch of stuff.
 
-npm i express
-npm i body-parser
-npm fs
-npm https
+- npm i express
+- npm i body-parser
+- npm fs
+- npm https
 
 I think that's it.
