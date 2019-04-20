@@ -24,30 +24,37 @@ app.get('/ping', function(req, res) {
   res.send('pong');
 });
 
-app.post('/byali/paid', function(req, res) {
-  console.log('Checking status...');
-  var status = req.body.status;
-  console.log(status);
-  var legit = false;
-  console.log(req.body.amount);
-  console.log(req.body.currency);
-  console.log(req.body.to);
-  if(parseFloat(req.body.amount) >= 0.09 && req.body.currency == "GBP" && (req.body.to == "1512" || req.body.to == undefined) && req.body.status != "DOUBLE_SPENT"){
-    legit = true;
+// object which keeps what stuff has been paid for while server is alive.
+var legit = {};
+
+app.post('/byali/paidment', function(req, res) {
+  console.log('Moneybutton Webhook hit me...');
+  var paymentid = req.body.payment.id;
+  if(parseFloat(req.body.payment.amount) >= 0.09 && req.body.payment.currency == "GBP" && (req.body.payment.to == "1512" || req.body.payment.to == undefined) && req.body.payment.status != "DOUBLE_SPENT" && req.body.secret == "<<< YOUR APPS SECRET >>>"){
+    legit[paymentid] = true;
     console.log('payment is good');
-  }
-  else{
+  } else{
+    legit[paymentid] = false;
     console.log('Bad payment');
   }
-  if (legit){
+  res.status(200);
+});
+
+app.post('/byali/paid', function(req, res) {
+  var paymentid = req.body.id;
+  if (legit[paymentid]){
+    // secret data being protected by the wallwall:
     res.status(200).send({ imgurl: "https://bico.media/0d919b62a99551c9a9682af1301b4f19e91c34810de16f0eddc72d684be0e66a"});
   } else{
     res.status(200).send({ imgurl: "stop.png"});
   }
 });
 
+
 // Invoke the app's `.listen()` method below:
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
-https.createServer(options, app).listen(8443);
+https.createServer(options, app).listen(8443, () => {
+  console.log(`Https server is listening on port 8443`);
+});
