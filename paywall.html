@@ -48,29 +48,31 @@
     <div id="paid-content"></div>
     <script>
       function displayInfo (payment) {
-        console.log('A payment has occurred!', payment);
-        const Url = "https://YOURWEBSITEHERE.com:8443/paid";
-        const otherParams = {
-          headers:{
-            "Content-Type":"application/json",
-            "Accept":"application/json"
-          },
-          body: JSON.stringify(payment),
-          mode: "cors",
-          method:"POST"
-         };
-        const datares = fetch(Url,otherParams)
-        .then(data=>{
-          return data.json()
-        })
-        .then(res=>{
-          var jsonres = res;
-          console.log(jsonres);
-          document.querySelector("#paid-content").innerHTML = `<img src="${jsonres.imgurl}" alt="secret" />`;
-          document.querySelector("#my-money-button").style.display = "none";
-          console.log(jsonres);
-        })
-        .then(error=>{console.log(error)});
+          setTimeout(function () {
+          console.log('A payment has occurred!', payment);
+          const Url = "https://YOURWEBSITEHERE.com:8443/paid";
+          const otherParams = {
+            headers:{
+              "Content-Type":"application/json",
+              "Accept":"application/json"
+            },
+            body: JSON.stringify(payment),
+            mode: "cors",
+            method:"POST"
+           };
+          const datares = fetch(Url,otherParams)
+          .then(data=>{
+            return data.json()
+          })
+          .then(res=>{
+            var jsonres = res;
+            console.log(jsonres);
+            document.querySelector("#paid-content").innerHTML = `<img src="${jsonres.imgurl}" alt="secret" />`;
+            document.querySelector("#my-money-button").style.display = "none";
+            console.log(jsonres);
+          })
+          .then(error=>{console.log(error)});
+         }, 5000);
       };
 
       function revealStuff(data){
@@ -84,7 +86,9 @@
         amount: "0.10",
         currency: "GBP",
         onPayment: displayInfo,
-        label: "Pay for content"
+        label: "Pay for content",
+        clientIdentifier: "<<<<<OUT YOUR CLIENT IDENTIFIER HERE FROM YOUR APP>>>>>>>>",
+        buttonId: "something"
       })
 
     </script>
